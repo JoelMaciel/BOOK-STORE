@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.UnsupportedMediaTypeStatusException;
+
+import br.com.joel.exceptions.UnsupportedMathOperationException;
 
 @RestController
 @RequestMapping
@@ -19,7 +22,7 @@ public class MathController {
 					  @PathVariable(value = "numberTwo") String numberTwo) throws Exception {
 		
 		if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
-			throw new Exception();
+			throw new UnsupportedMathOperationException("Please set a numeric value");
 		}
 		return convertToDouble(numberOne) + convertToDouble(numberTwo);
 	}
