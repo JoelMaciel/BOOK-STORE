@@ -3,6 +3,10 @@ package br.com.joel.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,20 +38,21 @@ public class PersonController {
 	}
 	
 	@PostMapping
-	public Person create(@RequestBody Person person) {
+	public ResponseEntity<Person> create(@RequestBody Person person) {
 		personService.create(person);
-		return person;
+		return ResponseEntity.status(HttpStatus.CREATED).body(person);
 	}
 	
 	@PutMapping("/{personId}")
-	public Person update(@RequestBody Person person) {
+	public ResponseEntity<Person> update(@RequestBody Person person) {
 		personService.update(person);
-		return person;
+		return ResponseEntity.status(HttpStatus.OK).body(person);
 	}
 	
 	@DeleteMapping("/{personId}")
-	public void delete(@PathVariable("personId") Long personId) {
+	public ResponseEntity<Void> delete(@PathVariable("personId") Long personId) {
 		personService.delete(personId);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }
