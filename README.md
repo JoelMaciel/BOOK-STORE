@@ -1,4 +1,4 @@
-# MICROSERVICES STUDIES WITH AWS
+# Book store where the admin user inserts, updates and deletes books.
 
 ## Deepening the studies of microservices with java and AWS..
 
