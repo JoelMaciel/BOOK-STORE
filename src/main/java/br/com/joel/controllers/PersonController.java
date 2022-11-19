@@ -13,41 +13,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.joel.model.Person;
-import br.com.joel.services.PersonServices;
+import br.com.joel.services.PersonService;
 
 @RestController
 @RequestMapping("/persons")
 public class PersonController {
 
 	@Autowired
-	private PersonServices personServices;
+	private PersonService personService;
 	
 	@GetMapping
 	public List<Person> findAll() {
-		return  personServices.findAll();
+		return  personService.findAll();
 	}
 	
 	@GetMapping(value = "/{personId}")
 	public Person findById(@PathVariable(value = "personId") Long personId) {
 
-		return personServices.findById(personId);
+		return personService.findById(personId);
 	}
 	
 	@PostMapping
 	public Person create(@RequestBody Person person) {
-		personServices.create(person);
+		personService.create(person);
 		return person;
 	}
 	
 	@PutMapping("/{personId}")
 	public Person update(@RequestBody Person person) {
-		personServices.update(person);
+		personService.update(person);
 		return person;
 	}
 	
 	@DeleteMapping("/{personId}")
 	public void delete(@PathVariable("personId") Long personId) {
-		personServices.delete(personId);
+		personService.delete(personId);
 	}
 
 }

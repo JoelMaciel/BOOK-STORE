@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.joel</groupId>
-	<artifactId>FisrtStepsInJavaSpring</artifactId>
+	<artifactId>Books-Storage</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>05_FisrtStepsInJavaSpring</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Books-Storage</name>
+	<description>book store design</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
