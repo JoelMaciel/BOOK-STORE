@@ -6,7 +6,7 @@ import java.util.Objects;
 public class PersonVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Long personId;
 
 	private String firstName;
 
@@ -20,12 +20,12 @@ public class PersonVO implements Serializable {
 
 	}
 
-	public Long getId() {
-		return id;
+	public Long getPersonId() {
+		return personId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPersonId(Long personId) {
+		this.personId = personId;
 	}
 
 	public String getFirstName() {
@@ -62,7 +62,7 @@ public class PersonVO implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(address, firstName, gender, lastName, personId);
 	}
 
 	@Override
@@ -74,7 +74,13 @@ public class PersonVO implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		PersonVO other = (PersonVO) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(gender, other.gender) && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(personId, other.personId);
 	}
+
+	
+
+	
 
 }

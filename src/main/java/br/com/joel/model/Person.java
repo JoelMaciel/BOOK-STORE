@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "person")
 public class Person implements Serializable{
@@ -17,7 +18,7 @@ public class Person implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long personId;
 	
 	@Column(name = "first_name", nullable = false, length = 80)
 	private String firstName;
@@ -35,12 +36,12 @@ public class Person implements Serializable{
 	
 	}
 
-	public Long getId() {
-		return id;
+	public Long getPersonId() {
+		return personId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPersonId(Long personId) {
+		this.personId = personId;
 	}
 
 	public String getFirstName() {
@@ -77,7 +78,7 @@ public class Person implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(address, firstName, gender, lastName, personId);
 	}
 
 	@Override
@@ -89,10 +90,11 @@ public class Person implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Person other = (Person) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(address, other.address) && Objects.equals(firstName, other.firstName)
+				&& Objects.equals(gender, other.gender) && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(personId, other.personId);
 	}
-	
-	
+
 	
 
 	
