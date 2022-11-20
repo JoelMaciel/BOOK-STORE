@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.exceptions.ResourceNotFoundException;
-import br.com.joel.model.Person;
 import br.com.joel.repositories.PersonRepository;
 import jakarta.transaction.Transactional;
 
@@ -19,54 +19,55 @@ public class PersonService {
 	@Autowired
 	private PersonRepository personRepository;
 
-	public List<Person> findAll() {
+	public List<PersonVO> findAll() {
 		logger.info("Finding all people");
 		
 		return personRepository.findAll();
 	}
 
-	public Person findById(Long personId) {
+	public PersonVO findById(Long personId) {
 
-		logger.info("Finding one person !");
+		logger.info("Finding one PersonVO !");
 
-		var person = new Person();
-		person.setFirstName("Joel Maciel");
-		person.setLastName("Viana");
-		person.setAddress("Caucauia - Ceará");
-		person.setGender("Male");
+		var PersonVO = new PersonVO();
+		PersonVO.setFirstName("Joel Maciel");
+		PersonVO.setLastName("Viana");
+		PersonVO.setAddress("Caucauia - Ceará");
+		PersonVO.setGender("Male");
 
 		return personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
 	}
 
 	@Transactional
-	public Person create(Person person) {
-		logger.info("Creating one person!");
+	public PersonVO create(PersonVO personVo) {
+		logger.info("Creating one PersonVO!");
 
-		return personRepository.save(person);
+		return personRepository.save(personVo);
 	}
 
 	@Transactional
-	public Person update(Person person) {
-		logger.info("Update one person");
-		var newPerson = personRepository.findById(person.getId())
+	public PersonVO update(PersonVO personVo) {
+		logger.info("Update one PersonVO");
+		
+		var newPerson = personRepository.findById(personVo.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
 
-		newPerson.setFirstName(person.getFirstName());
-		newPerson.setLastName(person.getLastName());
-		newPerson.setAddress(person.getAddress());
-		newPerson.setGender(person.getGender());
+		newPerson.setFirstName(personVo.getFirstName());
+		newPerson.setLastName(personVo.getLastName());
+		newPerson.setAddress(personVo.getAddress());
+		newPerson.setGender(personVo.getGender());
 
 		return personRepository.save(newPerson);
 	}
 
 	public void delete(Long personId) {
-		logger.info("Delete one person");
+		logger.info("Delete one PersonVO");
 
-		var person = personRepository.findById(personId)
+		var PersonVO = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
 
-		personRepository.delete(person);
+		personRepository.delete(PersonVO);
 	}
 
 }
