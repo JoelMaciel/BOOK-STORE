@@ -5,13 +5,13 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.exceptions.ResourceNotFoundException;
 import br.com.joel.mapper.DozerMapper;
 import br.com.joel.model.Person;
 import br.com.joel.repositories.PersonRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class PersonService {
@@ -36,7 +36,7 @@ public class PersonService {
 		return DozerMapper.parseObject(person, PersonVO.class);
 	}
 
-	
+	@Transactional
 	public PersonVO create(PersonVO personVo) {
 		logger.info("Creating one PersonVO!");
 

@@ -3,6 +3,8 @@ package br.com.joel.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,38 +23,36 @@ public class PersonController {
 
 	@Autowired
 	private PersonService personService;
-	
+
 	@GetMapping
 	public List<PersonVO> findAll() {
-		return  personService.findAll();
+		return personService.findAll();
 	}
-	
+
 	@GetMapping(value = "/{personId}")
 	public PersonVO findById(@PathVariable(value = "personId") Long personId) {
 
 		return personService.findById(personId);
 	}
-	
+
 	@PostMapping
 	public PersonVO create(@RequestBody PersonVO personVO) {
-		personService.create(personVO);
-		return personVO;
+		return personService.create(personVO);
+		
 	}
-	
-	@PutMapping("/{personId}")
-	public PersonVO update(@RequestBody PersonVO personVO) {
+
+	@PutMapping
+	public ResponseEntity<PersonVO> update(@RequestBody PersonVO personVO) {
 		personService.update(personVO);
-		return personVO;
+
+		return ResponseEntity.status(HttpStatus.OK).body(personVO);
 	}
-	
+
 	@DeleteMapping("/{personId}")
-	public void delete(@PathVariable("personId") Long personId) {
+	public ResponseEntity<Void> delete(@PathVariable("personId") Long personId) {
 		personService.delete(personId);
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }
-
-
-
-
-
