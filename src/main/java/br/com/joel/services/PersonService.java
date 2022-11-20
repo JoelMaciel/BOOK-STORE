@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.joel.data.vo.v1.PersonVO;
+import br.com.joel.data.vo.v2.PersonVOV2;
 import br.com.joel.exceptions.ResourceNotFoundException;
 import br.com.joel.mapper.DozerMapper;
+import br.com.joel.mapper.custom.PersonMapper;
 import br.com.joel.model.Person;
 import br.com.joel.repositories.PersonRepository;
 
@@ -20,6 +22,9 @@ public class PersonService {
 
 	@Autowired
 	private PersonRepository personRepository;
+	
+	@Autowired
+	private PersonMapper personMapper;
 
 	public List<PersonVO> findAll() {
 		logger.info("Finding all people");
@@ -43,6 +48,15 @@ public class PersonService {
 		var person = DozerMapper.parseObject(personVo, Person.class);
 		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
 		return newPersonVo;
+	}
+	
+	@Transactional
+	public PersonVOV2 createV2(PersonVOV2 personV2) {
+		logger.info("Creating one PersonVOV2!");
+		
+		var person = personMapper.convertVoToEntity(personV2);
+		var newPersonV2 = personMapper.convertEntityToVo(personRepository.save(person));
+		return newPersonV2;
 	}
 
 	@Transactional
@@ -70,5 +84,7 @@ public class PersonService {
 
 		personRepository.delete(PersonVO);
 	}
+
+	
 
 }
