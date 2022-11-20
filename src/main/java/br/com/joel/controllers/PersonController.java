@@ -34,15 +34,15 @@ public class PersonController {
 	}
 	
 	@PostMapping
-	public PersonVO create(@RequestBody PersonVO person) {
-		personService.create(person);
-		return person;
+	public PersonVO create(@RequestBody PersonVO personVO) {
+		personService.create(personVO);
+		return personVO;
 	}
 	
 	@PutMapping("/{personId}")
-	public PersonVO update(@RequestBody PersonVO person) {
-		personService.update(person);
-		return person;
+	public PersonVO update(@RequestBody PersonVO personVO) {
+		personService.update(personVO);
+		return personVO;
 	}
 	
 	@DeleteMapping("/{personId}")
