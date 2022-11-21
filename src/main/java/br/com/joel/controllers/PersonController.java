@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,29 +26,29 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 
-	@GetMapping
+	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public List<PersonVO> findAll() {
 		return personService.findAll();
 	}
 
-	@GetMapping(value = "/{personId}")
+	@GetMapping(value = "/{personId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public PersonVO findById(@PathVariable(value = "personId") Long personId) {
 
 		return personService.findById(personId);
 	}
 
-	@PostMapping
+	@PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public PersonVO create(@RequestBody PersonVO personVO) {
 		return personService.create(personVO);
 		
 	}
 	
-	@PostMapping(value = "/v2")
+	@PostMapping(value = "/v2", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public PersonVOV2 createV2(@RequestBody PersonVOV2 personV2) {
 		return personService.createV2(personV2);
 	}
 
-	@PutMapping
+	@PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<PersonVO> update(@RequestBody PersonVO personVO) {
 		personService.update(personVO);
 
