@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import br.com.joel.controllers.PersonController;
 import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.data.vo.v2.PersonVOV2;
 import br.com.joel.exceptions.ResourceNotFoundException;
@@ -38,7 +42,10 @@ public class PersonService {
 
 		var person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
-		return DozerMapper.parseObject(person, PersonVO.class);
+		
+		var personVO = DozerMapper.parseObject(person, PersonVO.class);
+		personVO.add(linkTo(methodOn(PersonController.class).findById(personId)).withSelfRel());
+		return personVO;
 	}
 
 	@Transactional
