@@ -33,7 +33,11 @@ public class PersonService {
 	public List<PersonVO> findAll() {
 		logger.info("Finding all people");
 
-		return DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
+		var persons = DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
+		persons.stream().forEach(person -> person.add(linkTo(methodOn(PersonController.class)
+				.findById(person.getPersonId())).withSelfRel()));
+		
+		return persons;
 	}
 
 	public PersonVO findById(Long personId) {
@@ -54,6 +58,8 @@ public class PersonService {
 
 		var person = DozerMapper.parseObject(personVo, Person.class);
 		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
+		newPersonVo.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonVo.getPersonId())).withSelfRel());
 		return newPersonVo;
 	}
 	
@@ -63,6 +69,8 @@ public class PersonService {
 		
 		var person = personMapper.convertVoToEntity(personV2);
 		var newPersonV2 = personMapper.convertEntityToVo(personRepository.save(person));
+		newPersonV2.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonV2.getPersonId())).withSelfRel());
 		return newPersonV2;
 	}
 
@@ -79,7 +87,9 @@ public class PersonService {
 		person.setGender(personVo.getGender());
 
 		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
-
+		newPersonVo.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonVo.getPersonId())).withSelfRel());
+		
 		return newPersonVo;
 	}
 
