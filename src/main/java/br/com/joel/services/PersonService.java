@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import br.com.joel.controllers.PersonController;
 import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.data.vo.v2.PersonVOV2;
 import br.com.joel.exceptions.ResourceNotFoundException;
@@ -29,7 +33,11 @@ public class PersonService {
 	public List<PersonVO> findAll() {
 		logger.info("Finding all people");
 
-		return DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
+		var persons = DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
+		persons.stream().forEach(person -> person.add(linkTo(methodOn(PersonController.class)
+				.findById(person.getPersonId())).withSelfRel()));
+		
+		return persons;
 	}
 
 	public PersonVO findById(Long personId) {
@@ -38,7 +46,10 @@ public class PersonService {
 
 		var person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
-		return DozerMapper.parseObject(person, PersonVO.class);
+		
+		var personVO = DozerMapper.parseObject(person, PersonVO.class);
+		personVO.add(linkTo(methodOn(PersonController.class).findById(personId)).withSelfRel());
+		return personVO;
 	}
 
 	@Transactional
@@ -47,6 +58,8 @@ public class PersonService {
 
 		var person = DozerMapper.parseObject(personVo, Person.class);
 		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
+		newPersonVo.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonVo.getPersonId())).withSelfRel());
 		return newPersonVo;
 	}
 	
@@ -56,6 +69,8 @@ public class PersonService {
 		
 		var person = personMapper.convertVoToEntity(personV2);
 		var newPersonV2 = personMapper.convertEntityToVo(personRepository.save(person));
+		newPersonV2.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonV2.getPersonId())).withSelfRel());
 		return newPersonV2;
 	}
 
@@ -72,7 +87,9 @@ public class PersonService {
 		person.setGender(personVo.getGender());
 
 		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
-
+		newPersonVo.add(linkTo(methodOn(PersonController.class)
+				.findById(newPersonVo.getPersonId())).withSelfRel());
+		
 		return newPersonVo;
 	}
 
