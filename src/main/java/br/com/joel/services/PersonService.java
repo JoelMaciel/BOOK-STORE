@@ -13,6 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import br.com.joel.controllers.PersonController;
 import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.data.vo.v2.PersonVOV2;
+import br.com.joel.exceptions.RequiredObjectIsNullException;
 import br.com.joel.exceptions.ResourceNotFoundException;
 import br.com.joel.mapper.DozerMapper;
 import br.com.joel.mapper.custom.PersonMapper;
@@ -26,7 +27,7 @@ public class PersonService {
 
 	@Autowired
 	private PersonRepository personRepository;
-	
+
 	@Autowired
 	private PersonMapper personMapper;
 
@@ -34,9 +35,9 @@ public class PersonService {
 		logger.info("Finding all people");
 
 		var persons = DozerMapper.parseListObjects(personRepository.findAll(), PersonVO.class);
-		persons.stream().forEach(person -> person.add(linkTo(methodOn(PersonController.class)
-				.findById(person.getPersonId())).withSelfRel()));
-		
+		persons.stream().forEach(person -> person
+				.add(linkTo(methodOn(PersonController.class).findById(person.getPersonId())).withSelfRel()));
+
 		return persons;
 	}
 
@@ -46,7 +47,7 @@ public class PersonService {
 
 		var person = personRepository.findById(personId)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
-		
+
 		var personVO = DozerMapper.parseObject(person, PersonVO.class);
 		personVO.add(linkTo(methodOn(PersonController.class).findById(personId)).withSelfRel());
 		return personVO;
@@ -54,43 +55,52 @@ public class PersonService {
 
 	@Transactional
 	public PersonVO create(PersonVO personVo) {
-		logger.info("Creating one PersonVO!");
 
-		var person = DozerMapper.parseObject(personVo, Person.class);
-		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
-		newPersonVo.add(linkTo(methodOn(PersonController.class)
-				.findById(newPersonVo.getPersonId())).withSelfRel());
-		return newPersonVo;
+		if (personVo == null) {
+			throw new RequiredObjectIsNullException();
+		} else {
+
+			logger.info("Creating one PersonVO!");
+
+			var person = DozerMapper.parseObject(personVo, Person.class);
+			var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
+			newPersonVo.add(linkTo(methodOn(PersonController.class).findById(newPersonVo.getPersonId())).withSelfRel());
+			return newPersonVo;
+		}
 	}
-	
+
 	@Transactional
 	public PersonVOV2 createV2(PersonVOV2 personV2) {
 		logger.info("Creating one PersonVOV2!");
-		
+
 		var person = personMapper.convertVoToEntity(personV2);
 		var newPersonV2 = personMapper.convertEntityToVo(personRepository.save(person));
-		newPersonV2.add(linkTo(methodOn(PersonController.class)
-				.findById(newPersonV2.getPersonId())).withSelfRel());
+		newPersonV2.add(linkTo(methodOn(PersonController.class).findById(newPersonV2.getPersonId())).withSelfRel());
 		return newPersonV2;
 	}
 
 	@Transactional
 	public PersonVO update(PersonVO personVo) {
-		logger.info("Update one PersonVO");
 
-		var person = personRepository.findById(personVo.getPersonId())
-				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
+		if (personVo == null) {
+			throw new RequiredObjectIsNullException();
+		} else {
+			logger.info("Update one PersonVO");
 
-		person.setFirstName(personVo.getFirstName());
-		person.setLastName(personVo.getLastName());
-		person.setAddress(personVo.getAddress());
-		person.setGender(personVo.getGender());
+			var person = personRepository.findById(personVo.getPersonId())
+					.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID !"));
 
-		var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
-		newPersonVo.add(linkTo(methodOn(PersonController.class)
-				.findById(newPersonVo.getPersonId())).withSelfRel());
-		
-		return newPersonVo;
+			person.setFirstName(personVo.getFirstName());
+			person.setLastName(personVo.getLastName());
+			person.setAddress(personVo.getAddress());
+			person.setGender(personVo.getGender());
+
+			var newPersonVo = DozerMapper.parseObject(personRepository.save(person), PersonVO.class);
+			newPersonVo.add(linkTo(methodOn(PersonController.class).findById(newPersonVo.getPersonId())).withSelfRel());
+
+			return newPersonVo;
+
+		}
 	}
 
 	public void delete(Long personId) {
@@ -101,7 +111,5 @@ public class PersonService {
 
 		personRepository.delete(PersonVO);
 	}
-
-	
 
 }
