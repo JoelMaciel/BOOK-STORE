@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import br.com.joel.data.vo.v1.PersonVO;
 import br.com.joel.junittests.mapper.mocks.MockPerson;
 import br.com.joel.model.Person;
 import br.com.joel.repositories.PersonRepository;
@@ -64,26 +65,75 @@ public class PersonServiceTest {
 	}
 	
 	@Test
+	void testCreate() {
+		Person person = mockPerson.mockEntity(1);
+		Person persisted = person;
+		persisted.setPersonId(1L);
+		
+		PersonVO personVo = mockPerson.mockVO(1);
+		personVo.setPersonId(1L);
+		
+		when(personRepository.save(person)).thenReturn(persisted);
+		
+		var result = personService.create(personVo);
+		
+		assertNotNull(result);
+		assertNotNull(result.getPersonId());
+		assertNotNull(result.getLinks());
+		
+		assertTrue(result.toString().contains("links: [</api/persons/v1/1>;rel=\"self\"]"));
+		assertEquals("Addres Test1", result.getAddress());
+		assertEquals("First Name Test1", result.getFirstName());
+		assertEquals("Last Name Test1", result.getLastName());
+		assertEquals("Female", result.getGender());
+		
+	}
+	
+	@Test
+	void testUpdate() {
+		Person person = mockPerson.mockEntity(1);
+		person.setPersonId(1L);
+		
+		Person persisted = person;
+		persisted.setPersonId(1L);
+		
+		PersonVO personVo = mockPerson.mockVO(1);
+		personVo.setPersonId(1L);
+		
+		when(personRepository.findById(1L)).thenReturn(Optional.of(person));
+		when(personRepository.save(person)).thenReturn(persisted);
+		
+		var result = personService.update(personVo);
+		
+		assertNotNull(result);
+		assertNotNull(result.getPersonId());
+		assertNotNull(result.getLinks());
+		
+		assertTrue(result.toString().contains("links: [</api/persons/v1/1>;rel=\"self\"]"));
+		assertEquals("Addres Test1", result.getAddress());
+		assertEquals("First Name Test1", result.getFirstName());
+		assertEquals("Last Name Test1", result.getLastName());
+		assertEquals("Female", result.getGender());
+	}
+	
+	@Test
+	void testDelete() {
+		Person person = mockPerson.mockEntity(1);
+		person.setPersonId(1L);
+		
+		when(personRepository.findById(1L)).thenReturn(Optional.of(person));
+		
+		personService.delete(1L);
+	}
+	
+	@Test
 	void testFindAll() {
 		fail("Not yet implemented");  
 	}
 	
 	
 	
-	@Test
-	void testCreate() {
-		fail("Not yet implemented");
-	}
 	
-	@Test
-	void testUpdate() {
-		fail("Not yet implemented");
-	}
-	
-	@Test
-	void testDelete() {
-		fail("Not yet implemented");
-	}
 
 }
 
