@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.joel.controllers.BookController;
-import br.com.joel.controllers.PersonController;
 import br.com.joel.data.vo.v1.BookVO;
 import br.com.joel.exceptions.RequiredObjectIsNullException;
 import br.com.joel.exceptions.ResourceNotFoundException;
@@ -32,7 +31,7 @@ public class BookService {
 
 		var books = DozerMapper.parseListObjects(bookRepository.findAll(), BookVO.class);
 		books.stream().forEach(book -> book
-				.add(linkTo(methodOn(PersonController.class).findById(book.getBookId())).withSelfRel()));
+				.add(linkTo(methodOn(BookController.class).findById(book.getBookId())).withSelfRel()));
 
 		return books;
 	}
@@ -60,7 +59,7 @@ public class BookService {
 
 			var book = DozerMapper.parseObject(bookVo, Book.class);
 			var newBookVo = DozerMapper.parseObject(bookRepository.save(book), BookVO.class);
-			newBookVo.add(linkTo(methodOn(PersonController.class)
+			newBookVo.add(linkTo(methodOn(BookController.class)
 					.findById(newBookVo.getBookId())).withSelfRel());
 			return newBookVo;
 		}
