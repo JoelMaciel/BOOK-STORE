@@ -6,6 +6,9 @@ public class TestConfig {
 	
 	public static final String HEADER_PARAM_AUTHORIZATION = "Authorization";
 	public static final String HEADER_PARAM_ORIGIN = "Origin";
+	public static final String ORIGIN_JOEL = "http://localhost:8080";
+	public static final String ORIGIN_MACIEL = "http://macieljoel.com.br";
+	
 	
 	public static final String CONTENT_TYPE_JSON = "application/json";
 	public static final String CONTENT_TYPE_XML = "application/xml";

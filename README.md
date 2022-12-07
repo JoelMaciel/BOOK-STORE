@@ -3,7 +3,7 @@
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/JoelMaciel/BOOK-STORE/blob/dev/LICENCE)
 
 
-## Deepening the studies of microservices with java and AWS..
+## Deepening my knowledge Java, Docker, AWS..
 
 ### PROJECT UNDER CONSTRUCTION
 
