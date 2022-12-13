@@ -1,4 +1,4 @@
-package br.com.joel.securityJwt;
+package br.com.joel.security.jwt;
 
 import java.util.Base64;
 import java.util.Date;
@@ -29,7 +29,7 @@ public class JwtTokenProvider {
 	@Value("${security.jwt.token.security-key: secret}")
 	private String secretKey = "secrect";
 
-	@Value("${security.jwt.token.expire-lenght = 3600}")
+	@Value("${security.jwt.token.expire-length = 3600}")
 	private long validityInMilliseconds = 3600;
 
 	@Autowired
